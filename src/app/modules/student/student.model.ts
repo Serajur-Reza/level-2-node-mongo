@@ -7,8 +7,7 @@ import {
   TUserName,
 } from './student.interface'
 import validator from 'validator'
-import bcrypt from 'bcrypt'
-import config from '../../config'
+
 import { NextFunction } from 'express'
 
 const userNameSchema = new Schema<TUserName>({
@@ -68,11 +67,13 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 const studentSchema = new Schema<TStudent, StudentModel>(
   {
     id: { type: String, unique: true, required: [true, 'id is missing'] },
-    password: {
-      type: String,
-      required: [true, 'password is missing'],
-      maxlength: [20, 'Password cannot be more than 20 characters'],
+    user: {
+      type: Schema.Types.ObjectId,
+      required: [true, 'user id is required'],
+      unique: true,
+      ref: 'User',
     },
+
     name: { type: userNameSchema, required: [true, 'name is missing'] },
     gender: {
       type: String,
@@ -128,25 +129,6 @@ const studentSchema = new Schema<TStudent, StudentModel>(
 //virtual
 studentSchema.virtual('fullName').get(function () {
   return `${this.name.firstName}  ${this.name.middleName}  ${this.name.lastName}`
-})
-
-// pre save middleware
-
-studentSchema.pre('save', async function (next) {
-  const user = this
-  user.password = await bcrypt.hash(
-    user.password,
-    Number(config.bcrypt_salt_rounds),
-  )
-  next()
-  // console.log(this, 'pre hook: we will save the data')
-})
-
-//post save middleware
-studentSchema.post('save', function (doc, next) {
-  doc.password = ''
-  console.log(this, 'post hook: we saved the data')
-  next()
 })
 
 // query middleware
