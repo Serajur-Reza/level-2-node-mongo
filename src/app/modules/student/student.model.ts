@@ -9,6 +9,7 @@ import {
 import validator from 'validator'
 
 import { NextFunction } from 'express'
+import { AcademicSemester } from '../academicSemester/academicSemester.model'
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -84,7 +85,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       },
       required: [true, 'gender is missing'],
     },
-    dateOfBirth: { type: String },
+    dateOfBirth: { type: Date },
     email: {
       type: String,
       required: [true, 'email is missing'],
@@ -109,11 +110,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       required: [true, 'localGuardian is missing'],
     },
     profileImg: { type: String },
-    active: {
-      type: String,
-      enum: ['active', 'blocked'],
-      default: 'active',
-    },
+    admissionSemester: { type: Schema.Types.ObjectId, ref: 'AcademicSemester' },
     isDeleted: {
       type: Boolean,
       default: false,
