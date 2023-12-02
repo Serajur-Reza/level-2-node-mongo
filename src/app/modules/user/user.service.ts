@@ -1,4 +1,6 @@
+import httpStatus from 'http-status'
 import config from '../../config'
+import AppError from '../../errors/AppError'
 import { TAcedemicSemester } from '../academicSemester/academicSemester.interface'
 import { AcademicSemester } from '../academicSemester/academicSemester.model'
 import { TStudent } from '../student/student.interface'
@@ -6,6 +8,7 @@ import { Student } from '../student/student.model'
 import { NewUser, TUser } from './user.interface'
 import { User } from './user.model'
 import generateStudentId from './users.utils'
+import mongoose from 'mongoose'
 
 const createStudentintoDB = async (password: string, payload: TStudent) => {
   const userData: Partial<TUser> = {}
@@ -18,24 +21,45 @@ const createStudentintoDB = async (password: string, payload: TStudent) => {
   )
 
   if (!admissionSemester) {
-    throw new Error('Semester does not exist')
+    throw new AppError(httpStatus.NOT_FOUND, 'Semester does not exist')
   }
-  userData.id = await generateStudentId(admissionSemester)
 
-  //create a user
-  const result = await User.create(userData) // built in static method
+  const session = await mongoose.startSession()
 
-  //create a student
-  if (Object.keys(result).length) {
+  try {
+    session.startTransaction()
+    userData.id = await generateStudentId(admissionSemester)
+
+    //create a user (transaction-1)
+    const newUser = await User.create([userData], { session }) // returns array
+
+    //create a student
+    if (!newUser.length) {
+      throw new AppError(httpStatus.NOT_FOUND, 'Failed to create user')
+    }
+
     // set _id as user
-    payload.id = result.id
-    payload.user = result._id
+    payload.id = newUser[0].id
+    payload.user = newUser[0]._id
 
-    const newStudent = await Student.create(payload)
+    //create a student (transaction-2)
+    const newStudent = await Student.create([payload], { session })
+    if (!newStudent.length) {
+      throw new AppError(httpStatus.NOT_FOUND, 'Failed to create stduent')
+    }
+    // return newStudent
+
+    await session.commitTransaction()
+    await session.endSession()
     return newStudent
+  } catch (err) {
+    await session.abortTransaction()
+    await session.endSession()
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      'Failed to create transaction student',
+    )
   }
-
-  return result
 }
 
 export const UserServices = {
