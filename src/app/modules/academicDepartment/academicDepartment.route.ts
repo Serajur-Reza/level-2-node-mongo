@@ -11,9 +11,9 @@ router.get('/:id', academicDepartmentControllers.getAcademicDepartment)
 
 router.post(
   '/create-academic-Department',
-  validateRequest(
-    AcademicDepartmentValidation.createAcademicDepartmentValidationSchema,
-  ),
+  // validateRequest(
+  //   AcademicDepartmentValidation.createAcademicDepartmentValidationSchema,
+  // ),
   academicDepartmentControllers.createAcademicDepartment,
 )
 
