@@ -55,7 +55,7 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   // }
   // const fieldQuery = await limitQuery.select(fields)
   // return fieldQuery
-  const studentQuery = new QueryBuilder(Student.find(), query)
+  const studentQuery = new QueryBuilder(Student.find().populate('user'), query)
     .search(studentSearchableFields)
     .filter()
     .sort()
