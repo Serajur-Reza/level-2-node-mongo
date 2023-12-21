@@ -8,7 +8,7 @@ export const createNameValidationSchema = z.object({
 
 export const createFacultyValidationSchema = z.object({
   body: z.object({
-    password: z.string().max(20),
+    password: z.string().max(20).optional(),
     faculty: z.object({
       name: createNameValidationSchema,
       gender: z.enum(['male', 'female', 'other']),
@@ -20,7 +20,7 @@ export const createFacultyValidationSchema = z.object({
       bloodGroup: z.enum(['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-']),
       presentAddress: z.string(),
       permanentAddress: z.string(),
-      profileImg: z.string(),
+      // profileImg: z.string(),
       academicDepartment: z.string(),
     }),
   }),
@@ -47,7 +47,7 @@ export const updateFacultyValidationSchema = z.object({
         .optional(),
       presentAddess: z.string().optional(),
       permanentAddress: z.string().optional(),
-      profileImg: z.string().optional(),
+      // profileImg: z.string().optional(),
       academicDepartment: z.string().optional(),
     }),
   }),

@@ -13,6 +13,13 @@ const userValidationSchema = z.object({
   isDeleted: z.boolean().optional().default(false),
 })
 
+const changeStatusValidationSchema = z.object({
+  body: z.object({
+    status: z.enum(['in-progress', 'blocked']).default('in-progress'),
+  }),
+})
+
 export const UserValidation = {
   userValidationSchema,
+  changeStatusValidationSchema,
 }
