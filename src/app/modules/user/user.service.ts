@@ -110,7 +110,7 @@ const createFacultyintoDB = async (
     session.startTransaction()
     userData.id = await generateAdminOrFacultyId('F')
 
-    userData.id = await generateStudentId(admissionSemester)
+    // userData.id = await generateStudentId(admissionSemester)
     const imageName = `${userData.id}${payload?.name?.firstName}`
     const path = file?.path
 
@@ -169,7 +169,7 @@ const createAdminintoDB = async (
     session.startTransaction()
     userData.id = await generateAdminOrFacultyId('A')
 
-    userData.id = await generateStudentId(admissionSemester)
+    // userData.id = await generateStudentId(admissionSemester)
     const imageName = `${userData.id}${payload?.name?.firstName}`
     const path = file?.path
 
