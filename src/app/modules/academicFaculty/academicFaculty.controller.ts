@@ -6,12 +6,15 @@ import { AcademicFacultyServices } from './academicFaculty.service'
 const getAllAcademicFaculties = catchAsync(async (req, res) => {
   //   const { password, student: studentData } = req.body
 
-  const result = await AcademicFacultyServices.getAllAcademicFacultiesFromDB()
+  const result = await AcademicFacultyServices.getAllAcademicFacultiesFromDB(
+    req.query,
+  )
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'All Academic Faculty found successfully',
-    data: result,
+    meta: result.meta,
+    data: result.result,
   })
 })
 

@@ -8,54 +8,13 @@ import QueryBuilder from '../../builder/QueryBuilder'
 import { studentSearchableFields } from './student.constant'
 
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
-  // const queryCopy = { ...query }
-  // let searchTerm = ''
-  // if (query.searchTerm) {
-  //   searchTerm = query?.searchTerm as string
-  // }
-  // const searchQuery = Student.find({
-  //   $or: studentSearchableFields.map(field => ({
-  //     [field]: { $regex: searchTerm, $options: 'i' },
-  //   })),
-  // })
-  // const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields']
-  // excludeFields.forEach(el => delete queryCopy[el])
-  // const filterQuery = searchQuery
-  //   .find(queryCopy)
-  //   .populate('admissionSemester')
-  //   .populate({
-  //     path: 'academicDepartment',
-  //     populate: {
-  //       path: 'academicFaculty',
-  //     },
-  //   })
-  // let sortVar: any = '-createdAt'
-  // if (query.sort) {
-  //   sortVar = query.sort as string
-  // }
-  // // console.log(sortVar)
-  // const sortQuery = filterQuery.sort(sortVar)
-  // let page = 1
-  // let limit = 2
-  // let skip = 0
-  // if (query.limit) {
-  //   limit = Number(query.limit)
-  // }
-  // if (query.page) {
-  //   page = Number(query.page)
-  //   skip = (page - 1) * limit
-  // }
-  // const paginateQuery = sortQuery.skip(skip)
-  // const limitQuery = paginateQuery.limit(limit)
-  // // console.log('kutta', limit)
-  // // const limitQuery = await filterQuery.limit(limit)
-  // let fields = '-__v'
-  // if (query.fields) {
-  //   fields = (query.fields as string).split(',').join('')
-  // }
-  // const fieldQuery = await limitQuery.select(fields)
-  // return fieldQuery
-  const studentQuery = new QueryBuilder(Student.find().populate('user'), query)
+  const studentQuery = new QueryBuilder(
+    Student.find()
+      .populate('user')
+      .populate('admissionSemester')
+      .populate('academicDepartment academicFaculty'),
+    query,
+  )
     .search(studentSearchableFields)
     .filter()
     .sort()

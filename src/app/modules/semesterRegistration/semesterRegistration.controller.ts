@@ -14,7 +14,7 @@ const createSemesterRegistrationController = catchAsync(
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Semester Registration done successfully',
+      message: 'Semester Registration created successfully',
       data: result,
     })
   },
@@ -31,7 +31,8 @@ const getAllSemesterRegistrationController = catchAsync(
       statusCode: httpStatus.OK,
       success: true,
       message: 'Semesters Retrieved successfully',
-      data: result,
+      meta: result.meta,
+      data: result.result,
     })
   },
 )
@@ -63,7 +64,7 @@ const updateSemesterRegistrationController = catchAsync(
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Semester Registration done successfully',
+      message: 'Semester Registration updated successfully',
       data: result,
     })
   },

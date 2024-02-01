@@ -3,14 +3,19 @@ import catchAsync from '../../middlewares/catchAsync'
 import sendResponse from '../../utils/sendResponse'
 import { EnrolledCoursesServices } from './enrolledCourses.service'
 
-const getAllEnrolledCourses = catchAsync(async (req, res) => {
-  const result = await EnrolledCoursesServices.getAllEnrolledCourseFromDB()
+const getMyEnrolledCourses = catchAsync(async (req, res) => {
+  const studentId = req.user.userId
+  const result = await EnrolledCoursesServices.getMyEnrolledCourseFromDB(
+    studentId,
+    req.query,
+  )
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'enrolled courses found successfully',
-    data: result,
+    meta: result.meta,
+    data: result.result,
   })
 })
 
@@ -46,7 +51,7 @@ const updateEnrolledCourseMarks = catchAsync(async (req, res) => {
 })
 
 export const EnrolledCoursesControllers = {
-  getAllEnrolledCourses,
+  getMyEnrolledCourses,
   createEnrolledCourse,
   updateEnrolledCourseMarks,
 }

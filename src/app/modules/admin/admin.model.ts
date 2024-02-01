@@ -33,7 +33,7 @@ const adminSchema = new Schema<TAdmin>(
     },
     presentAddress: { type: String },
     permanentAddress: { type: String },
-    profileImg: { type: String },
+    profileImg: { type: String, default: '' },
     isDeleted: { type: Boolean, default: false },
   },
   {

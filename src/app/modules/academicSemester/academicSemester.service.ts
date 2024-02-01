@@ -3,10 +3,22 @@ import AppError from '../../errors/AppError'
 import { academicSemesterNameCodeMapper } from './academicSemester.constants'
 import { TAcedemicSemester } from './academicSemester.interface'
 import { AcademicSemester } from './academicSemester.model'
+import QueryBuilder from '../../builder/QueryBuilder'
 
-const getAllAcademicSemestersFromDB = async () => {
-  const result = await AcademicSemester.find()
-  return result
+const getAllAcademicSemestersFromDB = async (
+  query: Record<string, unknown>,
+) => {
+  const academicSemestersQuery = new QueryBuilder(
+    AcademicSemester.find(),
+    query,
+  )
+    .filter()
+    .sort()
+    .paginate()
+    .fields()
+  const result = await academicSemestersQuery.modelQuery
+  const meta = await academicSemestersQuery.countTotal()
+  return { meta, result }
 }
 
 const getAcademicSemesterFromDB = async (payload: string) => {

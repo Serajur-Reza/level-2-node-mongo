@@ -7,12 +7,13 @@ const getAllAcademicDepartments = catchAsync(async (req, res) => {
   //   const { password, student: studentData } = req.body
 
   const result =
-    await AcademicDepartmentServices.getAllAcademicDepartmentsFromDB()
+    await AcademicDepartmentServices.getAllAcademicDepartmentsFromDB(req.query)
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'All Academic Department found successfully',
-    data: result,
+    meta: result.meta,
+    data: result.result,
   })
 })
 

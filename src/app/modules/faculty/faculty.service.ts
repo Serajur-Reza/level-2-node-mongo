@@ -8,7 +8,10 @@ import AppError from '../../errors/AppError'
 import httpStatus from 'http-status'
 
 const getAllFacultiesFromDB = async (query: Record<string, unknown>) => {
-  const facultyQuery = new QueryBuilder(Faculty.find(), query)
+  const facultyQuery = new QueryBuilder(
+    Faculty.find().populate('academicDepartment academicFaculty'),
+    query,
+  )
     .search(facultySearchableFields)
     .filter()
     .sort()
@@ -16,7 +19,8 @@ const getAllFacultiesFromDB = async (query: Record<string, unknown>) => {
     .fields()
 
   const result = await facultyQuery.modelQuery
-  return result
+  const meta = await facultyQuery.countTotal()
+  return { meta, result }
 }
 
 const getSingleFacultyFromDB = async (id: string) => {

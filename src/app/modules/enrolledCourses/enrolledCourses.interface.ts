@@ -1,6 +1,6 @@
 import { Types } from 'mongoose'
 
-export type TGrades = 'A' | 'B' | 'C' | 'D' | 'F' | 'N/A'
+export type TGrades = 'A' | 'B' | 'C' | 'D' | 'F' | 'NA'
 
 export type TEnrolledCourseMarks = {
   classTest1: number

@@ -7,37 +7,71 @@ import { USER_ROLE } from '../user/user.constant'
 
 const router = express.Router()
 
-router.get('/', courseControllers.getAllCourses)
+router.get(
+  '/',
+  auth(
+    USER_ROLE.admin,
+    USER_ROLE.superAdmin,
+    USER_ROLE.student,
+    USER_ROLE.faculty,
+  ),
+  courseControllers.getAllCourses,
+)
 
-router.get('/:id', courseControllers.getSingleCourse)
+router.get(
+  '/:id',
+  auth(
+    USER_ROLE.admin,
+    USER_ROLE.superAdmin,
+    USER_ROLE.student,
+    USER_ROLE.faculty,
+  ),
+  courseControllers.getSingleCourse,
+)
 
 router.post(
   '/create-course',
-  auth(USER_ROLE.admin),
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
   validateRequest(courseValidation.createCourseValidationSchema),
   courseControllers.createCourse,
 )
 
 router.put(
   '/:courseId/assign-faculties',
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
   validateRequest(courseValidation.facultiesWithCourseValidationSchema),
   courseControllers.assignFacultiesWithCourse,
 )
 
+router.get(
+  '/:courseId/get-faculties',
+  auth(
+    USER_ROLE.admin,
+    USER_ROLE.superAdmin,
+    USER_ROLE.faculty,
+    USER_ROLE.student,
+  ),
+  courseControllers.getFacultiesWithCourse,
+)
+
 router.delete(
   '/:courseId/remove-faculties',
-  auth(USER_ROLE.admin),
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
   validateRequest(courseValidation.facultiesWithCourseValidationSchema),
   courseControllers.removeFacultiesFromCourse,
 )
 
 router.patch(
   '/:id',
-  auth(USER_ROLE.admin),
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
   validateRequest(courseValidation.updateCourseValidationSchema),
   courseControllers.updateCourse,
 )
 
-router.delete('/:id', auth(USER_ROLE.admin), courseControllers.deleteCourse)
+router.delete(
+  '/:id',
+  auth(USER_ROLE.admin, USER_ROLE.superAdmin),
+  courseControllers.deleteCourse,
+)
 
 export const CourseRoutes = router

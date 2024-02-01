@@ -4,14 +4,14 @@ import sendResponse from '../../utils/sendResponse'
 import { FacultyServices } from './faculty.service'
 
 const getAllFaculties = catchAsync(async (req, res) => {
-  console.log('test:', req.cookies)
   const result = await FacultyServices.getAllFacultiesFromDB(req.query)
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Faculties retrieved successfully',
-    data: result,
+    meta: result.meta,
+    data: result.result,
   })
 })
 const getSingleFaculty = catchAsync(async (req, res) => {

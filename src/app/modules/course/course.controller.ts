@@ -11,7 +11,8 @@ const getAllCourses = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'All courses found successfully',
-    data: result,
+    meta: result.meta,
+    data: result.result,
   })
 })
 
@@ -66,6 +67,18 @@ const deleteCourse = catchAsync(async (req, res) => {
   })
 })
 
+const getFacultiesWithCourse = catchAsync(async (req, res) => {
+  const result = await courseServices.getFacultiesWithCourseFromDB(
+    req.params.courseId,
+  )
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Course faculties retrieved successfully',
+    data: result,
+  })
+})
+
 const assignFacultiesWithCourse = catchAsync(async (req, res) => {
   //   const { password, student: studentData } = req.body
 
@@ -102,6 +115,7 @@ export const courseControllers = {
   createCourse,
   updateCourse,
   deleteCourse,
+  getFacultiesWithCourse,
   assignFacultiesWithCourse,
   removeFacultiesFromCourse,
 }

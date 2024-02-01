@@ -6,12 +6,15 @@ import { AcademicSemesterServices } from './academicSemester.service'
 const getAllAcademicSemesters = catchAsync(async (req, res) => {
   //   const { password, student: studentData } = req.body
 
-  const result = await AcademicSemesterServices.getAllAcademicSemestersFromDB()
+  const result = await AcademicSemesterServices.getAllAcademicSemestersFromDB(
+    req.query,
+  )
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'All Academic Semester found successfully',
-    data: result,
+    meta: result.meta,
+    data: result.result,
   })
 })
 

@@ -7,13 +7,16 @@ import { USER_ROLE } from '../user/user.constant'
 
 const router = express.Router()
 
+// router.get(
+//   '/',
+//   auth(USER_ROLE.admin, USER_ROLE.student),
+//   EnrolledCoursesControllers.getAllEnrolledCourses,
+// )
+
 router.get(
-  '/',
-  auth(USER_ROLE.admin, USER_ROLE.student),
-  // validateRequest(
-  //   enrolledCoursesValidations.createEnrolledCourseValidationSchema,
-  // ),
-  EnrolledCoursesControllers.getAllEnrolledCourses,
+  '/my-enrolled-courses',
+  auth(USER_ROLE.student),
+  EnrolledCoursesControllers.getMyEnrolledCourses,
 )
 
 router.post(
